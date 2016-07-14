@@ -73,7 +73,7 @@ $app->get('/tickets', function (Request $request, Response $response)
     $mapper = new TicketMapper($this->db);
     $tickets = $mapper->getTickets();
 
-    $response->getBody()->write(var_export($tickets, true));
+    $response = $response->withJson($tickets);
     return $response;
 });
 
@@ -84,7 +84,7 @@ $app->get('/tickets/{id}', function(Request $request, Response $response, $args)
     $mapper = new TicketMapper($this->db);
     $ticket = $mapper->getTicketById($ticket_id);
 
-    $response->getBody()->write(var_export($ticket, true));
+    $response = $response->withJson($ticket);
     return $response;
 });
 

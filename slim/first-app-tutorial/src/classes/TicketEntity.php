@@ -1,10 +1,15 @@
 <?php
 
-class TicketEntity {
+class TicketEntity implements JsonSerializable {
+
+    const ID = 'id';
+    const TITLE = 'title';
+    const DESCRIPTION = 'description';
+    const COMPONENT = 'component';
 
     protected $id;
     protected $title;
-    protected $desctiption;
+    protected $description;
     protected $component;
 
 
@@ -15,14 +20,25 @@ class TicketEntity {
      * @param array $data The data to use to create
      */
      public function __construct(array $data){
-         if (isset($data['id'])) {
-             $this->id = $data['id'];
+         if (isset($data[self::ID])) {
+             $this->id = $data[self::ID];
          }
 
-         $this->title = $data['title'];
-         $this->description = $data['description'];
-         $this->component = $data['component'];
+         $this->title = $data[self::TITLE];
+         $this->description = $data[self::DESCRIPTION];
+         $this->component = $data[self::COMPONENT];
      }
+
+     public function jsonSerialize()
+        {
+            return [
+                self::ID => $this->getId(),
+                self::TITLE => $this->getTitle(),
+                self::DESCRIPTION => $this->getDescription(),
+                self::COMPONENT => $this->getComponent()
+            ];
+        }
+
 
 
      public function getId()
