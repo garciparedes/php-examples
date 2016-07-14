@@ -10,6 +10,7 @@ spl_autoload_register(function ($classname) {
 
 # Settings
 ################################################################################
+################################################################################
 
 $config['displayErrorDetails'] = true;
 $config['addContentLengthHeader'] = false;
@@ -24,14 +25,16 @@ $app = new \Slim\App(["settings" => $config]);
 $container = $app->getContainer();
 
 
-$container['logger'] = function($c) {
+$container['logger'] = function($c)
+{
     $logger = new \Monolog\Logger('my_logger');
     $file_handler = new \Monolog\Handler\StreamHandler("../logs/app.log");
     $logger->pushHandler($file_handler);
     return $logger;
 };
 
-$container['db'] = function ($c) {
+$container['db'] = function ($c)
+{
     $db = $c['settings']['db'];
     $pdo = new PDO("mysql:host=" . $db['host'] . ";dbname=" . $db['dbname'],
         $db['user'], $db['pass']);
@@ -43,8 +46,15 @@ $container['db'] = function ($c) {
 
 # Routes
 ################################################################################
+################################################################################
 
-$app->get('/hello/{name}', function (Request $request, Response $response) {
+
+
+# Hello
+################################################################################
+
+$app->get('/hello/{name}', function (Request $request, Response $response)
+{
     $name = $request->getAttribute('name');
     $this->logger->addInfo("Something interesting happened: ". $name . " is here.");
     $response->getBody()->write("Hello, $name");
@@ -54,7 +64,11 @@ $app->get('/hello/{name}', function (Request $request, Response $response) {
 
 
 
-$app->get('/tickets', function (Request $request, Response $response) {
+#Tickets
+################################################################################
+
+$app->get('/tickets', function (Request $request, Response $response)
+{
     $this->logger->addInfo("Ticket list");
     $mapper = new TicketMapper($this->db);
     $tickets = $mapper->getTickets();
@@ -64,6 +78,40 @@ $app->get('/tickets', function (Request $request, Response $response) {
 });
 
 
+$app->get('/tickets/{id}', function(Request $request, Response $response, $args)
+{
+    $ticket_id = (int) $args['id'];
+    $mapper = new TicketMapper($this->db);
+    $ticket = $mapper->getTicketById($ticket_id);
+
+    $response->getBody()->write(var_export($ticket, true));
+    return $response;
+});
+
+
+$app->post('/tickets', function(Request $request, Response $response)
+{
+    $data = $request->getParsedBody();
+
+    $ticket_data = [];
+    $ticket_data['title'] = filter_var($data['title'], FILTER_SANITIZE_STRING);
+    $ticket_data['description'] = filter_var($data['description'], FILTER_SANITIZE_STRING);
+
+    $component_id = (int) $data['component'];
+    $component_mapper = new ComponentMapper($this->db);
+    $component = $component_mapper->getComponentById($component_id);
+    $ticket_data['component'] = $component->getName();
+
+    $ticket = new TicketEntity($ticket_data);
+    $ticket_mapper = new TicketMapper($this->db);
+    $ticket_mapper->save($ticket);
+
+    $response = $response->withRedirect("/tickets");
+    return $response;
+});
+
 # Run
 ################################################################################
+################################################################################
+
 $app->run();
