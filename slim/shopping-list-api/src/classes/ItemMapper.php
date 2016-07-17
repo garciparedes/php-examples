@@ -29,17 +29,54 @@ class ItemMapper extends Mapper {
         }
     }
 
+    public function deleteItemById($item_id)
+    {
+        $sql = "DELETE FROM items
+            WHERE id = :item_id
+            LIMIT 1";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(["item_id" => $item_id]);
+
+        /*
+        if($this->getItemById($item_id)) {
+            throw new Exception("could not delete record");
+        }
+        */
+    }
+
 
     public function save(ItemEntity $item)
     {
-        $sql = "insert into items
-            (name, done, user_id) values
+        $sql = "INSERT INTO items
+            (name, done, user_id) VALUES
             (:name, :done,
-            (select id from users where username = :username))";
+            (SELECT id FROM users WHERE username = :username))";
 
         $stmt = $this->db->prepare($sql);
 
         $result = $stmt->execute([
+            "name" => $item->getName(),
+            "done" => $item->getDone(),
+            "username" => $item->getUsername(),
+        ]);
+
+        if(!$result) {
+            throw new Exception("could not save record");
+        }
+    }
+
+    public function update(ItemEntity $item)
+    {
+
+        $sql = "UPDATE items
+            SET name = :name,
+                done = :done,
+                user_id = (SELECT id FROM users WHERE username = :username)
+            WHERE id = :item_id;";
+        $stmt = $this->db->prepare($sql);
+
+        $result = $stmt->execute([
+            "item_id" => $item->getId(),
             "name" => $item->getName(),
             "done" => $item->getDone(),
             "username" => $item->getUsername(),

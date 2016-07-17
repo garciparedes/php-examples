@@ -88,6 +88,45 @@ $app->get('/items/{id}', function(Request $request, Response $response, $args)
     return $response;
 });
 
+
+$app->delete('/items/{id}', function(Request $request, Response $response, $args)
+{
+    $item_id = (int) $args['id'];
+    $mapper = new ItemMapper($this->db);
+    $item = $mapper->deleteItemById($item_id);
+
+    #$response = $response->withRedirect("/items");
+    return $response;
+});
+
+$app->put('/items', function(Request $request, Response $response, $args)
+{
+    $data = $request->getParsedBody();
+
+    $item_data = [];
+    $item_data[ItemEntity::ID] = filter_var($data[ItemEntity::ID], FILTER_SANITIZE_STRING);
+    $item_data[ItemEntity::NAME] = filter_var($data[ItemEntity::NAME], FILTER_SANITIZE_STRING);
+    $item_data[ItemEntity::DONE] = filter_var($data[ItemEntity::DONE], FILTER_SANITIZE_STRING);
+
+
+    // work out the component
+    $user_id = (int)$data[UserEntity::USERNAME];
+
+    $user_mapper = new UserMapper($this->db);
+    $user = $user_mapper->getUserById($user_id);
+
+    $item_data[ItemEntity::USER] = $user->getUsername();
+
+    $item = new ItemEntity($item_data);
+
+    $item_mapper = new ItemMapper($this->db);
+    $item_mapper->update($item);
+
+    #$response = $response->withRedirect("/items/" . $item_data[ItemEntity::ID]);
+    return $response;
+});
+
+
 $app->post('/items', function (Request $request, Response $response) {
     $data = $request->getParsedBody();
 
@@ -97,7 +136,7 @@ $app->post('/items', function (Request $request, Response $response) {
 
 
     // work out the component
-    $user_id = (int)$data[ItemEntity::USER];
+    $user_id = (int)$data[UserEntity::USERNAME];
 
     $user_mapper = new UserMapper($this->db);
     $user = $user_mapper->getUserById($user_id);
