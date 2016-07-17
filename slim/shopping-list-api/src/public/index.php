@@ -88,6 +88,31 @@ $app->get('/items/{id}', function(Request $request, Response $response, $args)
     return $response;
 });
 
+$app->post('/items', function (Request $request, Response $response) {
+    $data = $request->getParsedBody();
+
+    $item_data = [];
+    $item_data[ItemEntity::NAME] = filter_var($data[ItemEntity::NAME], FILTER_SANITIZE_STRING);
+    $item_data[ItemEntity::DONE] = filter_var($data[ItemEntity::DONE], FILTER_SANITIZE_STRING);
+
+
+    // work out the component
+    $user_id = (int)$data[ItemEntity::USER];
+
+    $user_mapper = new UserMapper($this->db);
+    $user = $user_mapper->getUserById($user_id);
+
+    $item_data[ItemEntity::USER] = $user->getUsername();
+
+    $item = new ItemEntity($item_data);
+
+    $item_mapper = new ItemMapper($this->db);
+    $item_mapper->save($item);
+
+    $response = $response->withRedirect("/items");
+    return $response;
+});
+
 # Run
 ################################################################################
 ################################################################################

@@ -1,6 +1,6 @@
 <?php
 
-class UserEntity {
+class UserEntity implements JsonSerializable{
 
     const ID        = 'id';
     const USERNAME  = 'username';
@@ -28,13 +28,16 @@ class UserEntity {
         return $this->username;
     }
 
-    private function getPassWord()
+    private function getPassword()
     {
         return $this->password;
     }
 
-    private function return {
-        self::ID        => $this->getId(),
-        self::USERNAME  => $this->getUsername()
+    public function jsonSerialize()
+    {
+        return [
+            self::ID        => $this->getId(),
+            self::USERNAME  => $this->getUsername()
+        ];
     }
 }

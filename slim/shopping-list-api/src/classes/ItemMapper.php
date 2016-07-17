@@ -28,4 +28,26 @@ class ItemMapper extends Mapper {
             return new ItemEntity($stmt->fetch());
         }
     }
+
+
+    public function save(ItemEntity $item)
+    {
+        $sql = "insert into items
+            (name, done, user_id) values
+            (:name, :done,
+            (select id from users where username = :username))";
+
+        $stmt = $this->db->prepare($sql);
+
+        $result = $stmt->execute([
+            "name" => $item->getName(),
+            "done" => $item->getDone(),
+            "username" => $item->getUsername(),
+        ]);
+
+        if(!$result) {
+            throw new Exception("could not save record");
+        }
+    }
+
 }
