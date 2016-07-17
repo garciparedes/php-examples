@@ -25,7 +25,7 @@ class TicketsTable extends AbstractMigration {
 
         $items_table = $this->table('items');
         $items_table->addColumn('name', 'string')
-            ->addColumn('done', 'binary')
+            ->addColumn('done', 'boolean')
             ->addColumn('user_id', 'integer')
             ->addForeignKey('user_id', 'users', 'id')
             ->create();
@@ -39,6 +39,16 @@ class TicketsTable extends AbstractMigration {
             ],
             [
                 "name" => "sugar",
+                "done" => "0",
+                "user_id" => "1"
+            ],
+            [
+                "name" => "rice",
+                "done" => "0",
+                "user_id" => "1"
+            ],
+            [
+                "name" => "milk",
                 "done" => "0",
                 "user_id" => "1"
             ]

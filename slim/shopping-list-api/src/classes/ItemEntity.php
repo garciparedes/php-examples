@@ -1,23 +1,23 @@
 <?php
 
-class ItemEntity {
+class ItemEntity implements JsonSerializable {
 
     const ID    = 'id';
     const NAME  = 'name';
     const DONE  = 'done';
-    const USER  = 'user';
+    const USER  = 'username';
 
     private $id;
     private $name;
     private $done;
-    private $user;
+    private $username;
 
     public function __construct(array $data)
     {
         $this->id   = $data[self::ID];
         $this->name = $data[self::NAME];
         $this->done = $data[self::DONE];
-        $this->user = $data[self::USER];
+        $this->username = $data[self::USER];
     }
 
     public function getId()
@@ -35,17 +35,18 @@ class ItemEntity {
         return $this->done;
     }
 
-    public function()
+    public function getUsername()
     {
-        return $this->user;
+        return $this->username;
     }
 
     public function jsonSerialize()
     {
         return [
-            self::ID    => $this->getID();
-            self::NAME  => $this->getName();
-            self::DONE  => $this->getDone();
+            self::ID    => $this->getID(),
+            self::NAME  => $this->getName(),
+            self::DONE  => $this->getDone(),
+            self::USER  => $this->getUsername()
         ];
     }
 }

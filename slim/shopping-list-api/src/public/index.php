@@ -66,6 +66,18 @@ $app->get('/hello/{name}', function (Request $request, Response $response)
 });
 
 
+# Items
+################################################################################
+
+$app->get('/tickets', function (Request $request, Response $response) {
+    $this->logger->addInfo("Item list");
+    $mapper = new ItemMapper($this->db);
+    $items = $mapper->getItems();
+
+    $response = $response->withJson($items);
+    return $response;
+});
+
 # Run
 ################################################################################
 ################################################################################
