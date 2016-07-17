@@ -15,4 +15,17 @@ class ItemMapper extends Mapper {
         }
         return $results;
     }
+
+    public function getItemById($item_id)
+    {
+        $sql = "SELECT i.id, i.name, i.done, u.username
+            from items i
+            join users u on (u.id = i.user_id)
+            where i.id = :item_id";
+        $stmt = $this->db->prepare($sql);
+        $result = $stmt->execute(["item_id" => $item_id]);
+        if($result) {
+            return new ItemEntity($stmt->fetch());
+        }
+    }
 }

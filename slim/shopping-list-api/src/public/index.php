@@ -69,12 +69,22 @@ $app->get('/hello/{name}', function (Request $request, Response $response)
 # Items
 ################################################################################
 
-$app->get('/tickets', function (Request $request, Response $response) {
+$app->get('/items', function (Request $request, Response $response) {
     $this->logger->addInfo("Item list");
     $mapper = new ItemMapper($this->db);
     $items = $mapper->getItems();
 
     $response = $response->withJson($items);
+    return $response;
+});
+
+$app->get('/items/{id}', function(Request $request, Response $response, $args)
+{
+    $item_id = (int) $args['id'];
+    $mapper = new ItemMapper($this->db);
+    $item = $mapper->getItemById($item_id);
+
+    $response = $response->withJson($item);
     return $response;
 });
 
