@@ -16,6 +16,7 @@ class ItemMapper extends Mapper {
         return $results;
     }
 
+
     public function getItemById($item_id)
     {
         $sql = "SELECT i.id, i.name, i.done, u.username
@@ -28,6 +29,7 @@ class ItemMapper extends Mapper {
             return new ItemEntity($stmt->fetch());
         }
     }
+
 
     public function deleteItemById($item_id)
     {
@@ -65,6 +67,7 @@ class ItemMapper extends Mapper {
         }
     }
 
+
     public function update(ItemEntity $item)
     {
 
@@ -86,5 +89,4 @@ class ItemMapper extends Mapper {
             throw new Exception("could not save record");
         }
     }
-
 }

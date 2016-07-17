@@ -2,6 +2,8 @@
 
 class UserMapper extends Mapper
 {
+
+    
     public function getUsers()
     {
         $sql = "SELECT id, username, password
@@ -13,6 +15,7 @@ class UserMapper extends Mapper
         }
         return $results;
     }
+
 
     public function getUserById($id)
     {

@@ -18,20 +18,24 @@ class UserEntity implements JsonSerializable{
         $this->password = $data[self::PASSWORD];
     }
 
+
     public function getID()
     {
         return $this->id;
     }
+
 
     public function getUsername()
     {
         return $this->username;
     }
 
+
     private function getPassword()
     {
         return $this->password;
     }
+
 
     public function jsonSerialize()
     {

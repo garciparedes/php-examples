@@ -69,7 +69,8 @@ $app->get('/hello/{name}', function (Request $request, Response $response)
 # Items
 ################################################################################
 
-$app->get('/items', function (Request $request, Response $response) {
+$app->get('/items', function (Request $request, Response $response)
+{
     $this->logger->addInfo("Item list");
     $mapper = new ItemMapper($this->db);
     $items = $mapper->getItems();
@@ -77,6 +78,7 @@ $app->get('/items', function (Request $request, Response $response) {
     $response = $response->withJson($items);
     return $response;
 });
+
 
 $app->get('/items/{id}', function(Request $request, Response $response, $args)
 {
@@ -99,7 +101,8 @@ $app->delete('/items/{id}', function(Request $request, Response $response, $args
     return $response;
 });
 
-$app->put('/items', function(Request $request, Response $response, $args)
+
+$app->put('/items', function(Request $request, Response $response)
 {
     $data = $request->getParsedBody();
 
@@ -127,7 +130,8 @@ $app->put('/items', function(Request $request, Response $response, $args)
 });
 
 
-$app->post('/items', function (Request $request, Response $response) {
+$app->post('/items', function (Request $request, Response $response)
+{
     $data = $request->getParsedBody();
 
     $item_data = [];
@@ -151,6 +155,7 @@ $app->post('/items', function (Request $request, Response $response) {
     $response = $response->withRedirect("/items");
     return $response;
 });
+
 
 # Run
 ################################################################################
