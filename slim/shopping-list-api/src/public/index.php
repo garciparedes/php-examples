@@ -58,7 +58,6 @@ $item_mapper = new ItemMapper($container->db);
 
 $app->add(new \Slim\Middleware\HttpBasicAuthentication(array(
     "path" => "/items",
-    "realm" => "Here be dragons.",
     "secure" => false,
     "users" => $user_mapper->getUserPasswordMap(),
 )));
@@ -67,15 +66,17 @@ $app->add(new \Slim\Middleware\HttpBasicAuthentication(array(
 # Hello Middleware
 ################################################################################
 
+/*
 $app->add(function ($request, $response, $next) {
     $headers = $request->getHeaders();
     $username = $headers['PHP_AUTH_USER'][0];
 
-    $this->logger->addInfo("Something interesting happened: ". $username . " is here.");
+    $this->logger->addInfo("Something interesting happened: " . $username);
 
     $response = $next($request, $response);
     return $response;
 });
+*/
 
 
 # Routes
@@ -108,8 +109,6 @@ $app->get('/items', function (Request $request, Response $response)
     $mapper = new ItemMapper($this->db);
     $items = $mapper->getItems($username);
 
-
-    $response = $response->withHeader('Access-Control-Allow-Origin', '*');
     $response = $response->withJson($items);
     return $response;
 });
