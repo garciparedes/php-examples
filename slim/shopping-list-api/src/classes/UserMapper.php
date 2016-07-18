@@ -3,7 +3,7 @@
 class UserMapper extends Mapper
 {
 
-    
+
     public function getUsers()
     {
         $sql = "SELECT id, username, password
@@ -12,6 +12,18 @@ class UserMapper extends Mapper
         $results = [];
         while($row = $stmt->fetch()) {
             $results[] = new UserEntity($row);
+        }
+        return $results;
+    }
+
+    public function getUserPasswordMap()
+    {
+        $sql = "SELECT id, username, password
+            from users";
+        $stmt = $this->db->query($sql);
+        $results = [];
+        while($row = $stmt->fetch()) {
+            $results[$row[UserEntity::USERNAME]] = $row[UserEntity::PASSWORD];
         }
         return $results;
     }

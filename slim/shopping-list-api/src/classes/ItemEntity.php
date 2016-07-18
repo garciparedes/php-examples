@@ -54,7 +54,7 @@ class ItemEntity implements JsonSerializable {
             self::ID    => $this->getID(),
             self::NAME  => $this->getName(),
             self::DONE  => $this->getDone(),
-            self::USER  => $this->getUsername()
+            //self::USER  => $this->getUsername()
         ];
     }
 }

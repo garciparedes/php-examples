@@ -3,11 +3,12 @@
 class ItemMapper extends Mapper {
 
 
-    public function getItems()
+    public function getItems($username)
     {
-        $sql = "SELECT i.id, i.name, i.done, u.username
+        $sql = 'SELECT i.id, i.name, i.done, u.username
             from items i
-            join users u on (u.id = i.user_id)";
+            join users u on (u.id = i.user_id)
+            where u.username = "' . $username . '"';
         $stmt = $this->db->query($sql);
         $results = [];
         while($row = $stmt->fetch()) {

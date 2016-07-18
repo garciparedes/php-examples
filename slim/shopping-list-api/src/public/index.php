@@ -46,6 +46,23 @@ $container['db'] = function ($c) {
     return $pdo;
 };
 
+$user_mapper = new UserMapper($container->db);
+$item_mapper = new ItemMapper($container->db);
+
+# Middleware
+################################################################################
+################################################################################
+
+# Auth
+################################################################################
+
+$app->add(new \Slim\Middleware\HttpBasicAuthentication(array(
+    "path" => "/items",
+    "realm" => "Here be dragons.",
+    "secure" => false,
+    "users" => $user_mapper->getUserPasswordMap(),
+)));
+
 
 # Routes
 ################################################################################
@@ -71,10 +88,17 @@ $app->get('/hello/{name}', function (Request $request, Response $response)
 
 $app->get('/items', function (Request $request, Response $response)
 {
-    $this->logger->addInfo("Item list");
-    $mapper = new ItemMapper($this->db);
-    $items = $mapper->getItems();
+    $headers = $request->getHeaders();
+    $username = $headers['PHP_AUTH_USER'][0];
 
+
+    $this->logger->addInfo("Items list " . $username);
+
+    $mapper = new ItemMapper($this->db);
+    $items = $mapper->getItems($username);
+
+
+    $response = $response->withHeader('Access-Control-Allow-Origin', '*');
     $response = $response->withJson($items);
     return $response;
 });
