@@ -1,0 +1,6 @@
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule . index.php [L]
+Header set Access-Control-Allow-Origin "*"
+RewriteRule .* - [env=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
