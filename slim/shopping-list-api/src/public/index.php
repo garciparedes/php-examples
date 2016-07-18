@@ -64,6 +64,20 @@ $app->add(new \Slim\Middleware\HttpBasicAuthentication(array(
 )));
 
 
+# Hello Middleware
+################################################################################
+
+$app->add(function ($request, $response, $next) {
+    $headers = $request->getHeaders();
+    $username = $headers['PHP_AUTH_USER'][0];
+
+    $this->logger->addInfo("Something interesting happened: ". $username . " is here.");
+
+    $response = $next($request, $response);
+    return $response;
+});
+
+
 # Routes
 ################################################################################
 ################################################################################
@@ -76,7 +90,6 @@ $app->add(new \Slim\Middleware\HttpBasicAuthentication(array(
 $app->get('/hello/{name}', function (Request $request, Response $response)
 {
     $name = $request->getAttribute('name');
-    $this->logger->addInfo("Something interesting happened: ". $name . " is here.");
     $response->getBody()->write("Hello, ". $name);
 
     return $response;
