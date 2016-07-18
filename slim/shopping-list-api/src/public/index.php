@@ -92,8 +92,6 @@ $app->get('/items', function (Request $request, Response $response)
     $username = $headers['PHP_AUTH_USER'][0];
 
 
-    $this->logger->addInfo("Items list " . $username);
-
     $mapper = new ItemMapper($this->db);
     $items = $mapper->getItems($username);
 
@@ -106,9 +104,14 @@ $app->get('/items', function (Request $request, Response $response)
 
 $app->get('/items/{id}', function(Request $request, Response $response, $args)
 {
+    $headers = $request->getHeaders();
+    $username = $headers['PHP_AUTH_USER'][0];
+
+
     $item_id = (int) $args['id'];
     $mapper = new ItemMapper($this->db);
-    $item = $mapper->getItemById($item_id);
+    $item = $mapper->getItemById($username, $item_id);
+
 
     $response = $response->withJson($item);
     return $response;
@@ -117,9 +120,13 @@ $app->get('/items/{id}', function(Request $request, Response $response, $args)
 
 $app->delete('/items/{id}', function(Request $request, Response $response, $args)
 {
+    $headers = $request->getHeaders();
+    $username = $headers['PHP_AUTH_USER'][0];
+
+
     $item_id = (int) $args['id'];
     $mapper = new ItemMapper($this->db);
-    $item = $mapper->deleteItemById($item_id);
+    $item = $mapper->deleteItemById($username, $item_id);
 
     #$response = $response->withRedirect("/items");
     return $response;
@@ -128,21 +135,16 @@ $app->delete('/items/{id}', function(Request $request, Response $response, $args
 
 $app->put('/items', function(Request $request, Response $response)
 {
+    $headers = $request->getHeaders();
+    $username = $headers['PHP_AUTH_USER'][0];
+
     $data = $request->getParsedBody();
 
     $item_data = [];
     $item_data[ItemEntity::ID] = filter_var($data[ItemEntity::ID], FILTER_SANITIZE_STRING);
     $item_data[ItemEntity::NAME] = filter_var($data[ItemEntity::NAME], FILTER_SANITIZE_STRING);
     $item_data[ItemEntity::DONE] = filter_var($data[ItemEntity::DONE], FILTER_SANITIZE_STRING);
-
-
-    // work out the component
-    $user_id = (int)$data[UserEntity::USERNAME];
-
-    $user_mapper = new UserMapper($this->db);
-    $user = $user_mapper->getUserById($user_id);
-
-    $item_data[ItemEntity::USER] = $user->getUsername();
+    $item_data[ItemEntity::USER] = $username;
 
     $item = new ItemEntity($item_data);
 
@@ -156,20 +158,16 @@ $app->put('/items', function(Request $request, Response $response)
 
 $app->post('/items', function (Request $request, Response $response)
 {
+    $headers = $request->getHeaders();
+    $username = $headers['PHP_AUTH_USER'][0];
+
+
     $data = $request->getParsedBody();
 
     $item_data = [];
     $item_data[ItemEntity::NAME] = filter_var($data[ItemEntity::NAME], FILTER_SANITIZE_STRING);
     $item_data[ItemEntity::DONE] = filter_var($data[ItemEntity::DONE], FILTER_SANITIZE_STRING);
-
-
-    // work out the component
-    $user_id = (int)$data[UserEntity::USERNAME];
-
-    $user_mapper = new UserMapper($this->db);
-    $user = $user_mapper->getUserById($user_id);
-
-    $item_data[ItemEntity::USER] = $user->getUsername();
+    $item_data[ItemEntity::USER] = $username;
 
     $item = new ItemEntity($item_data);
 
@@ -177,6 +175,27 @@ $app->post('/items', function (Request $request, Response $response)
     $item_mapper->save($item);
 
     $response = $response->withRedirect("/items");
+    return $response;
+});
+
+
+# Users
+################################################################################
+$app->post('/users', function (Request $request, Response $response)
+{
+
+    $data = $request->getParsedBody();
+
+    $user_data = [];
+    $user_data[UserEntity::USERNAME] = filter_var($data[UserEntity::USERNAME], FILTER_SANITIZE_STRING);
+    $user_data[UserEntity::PASSWORD] = filter_var($data[UserEntity::PASSWORD], FILTER_SANITIZE_STRING);
+
+
+    $user = new UserEntity($user_data);
+
+    $item_mapper = new UserMapper($this->db);
+    $item_mapper->save($user);
+
     return $response;
 });
 

@@ -18,27 +18,28 @@ class ItemMapper extends Mapper {
     }
 
 
-    public function getItemById($item_id)
+    public function getItemById($username, $item_id)
     {
         $sql = "SELECT i.id, i.name, i.done, u.username
             from items i
             join users u on (u.id = i.user_id)
-            where i.id = :item_id";
+            where i.id = :item_id and u.username = :username";
         $stmt = $this->db->prepare($sql);
-        $result = $stmt->execute(["item_id" => $item_id]);
+        $result = $stmt->execute(["item_id" => $item_id, "username" =>$username]);
         if($result) {
             return new ItemEntity($stmt->fetch());
         }
     }
 
 
-    public function deleteItemById($item_id)
+    public function deleteItemById($username, $item_id)
     {
         $sql = "DELETE FROM items
-            WHERE id = :item_id
+            WHERE id = :item_id AND user_id = (SELECT id FROM users WHERE username = :username)
             LIMIT 1";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(["item_id" => $item_id]);
+        $stmt->execute(["item_id" => $item_id,
+            "username" => $username]);
 
         /*
         if($this->getItemById($item_id)) {
@@ -74,16 +75,15 @@ class ItemMapper extends Mapper {
 
         $sql = "UPDATE items
             SET name = :name,
-                done = :done,
-                user_id = (SELECT id FROM users WHERE username = :username)
-            WHERE id = :item_id;";
+                done = :done
+            WHERE id = :item_id AND user_id = (SELECT id FROM users WHERE username = :username);";
         $stmt = $this->db->prepare($sql);
 
         $result = $stmt->execute([
             "item_id" => $item->getId(),
             "name" => $item->getName(),
             "done" => $item->getDone(),
-            "username" => $item->getUsername(),
+            "username" => $item->getUsername()
         ]);
 
         if(!$result) {

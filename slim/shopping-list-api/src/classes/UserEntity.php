@@ -31,7 +31,7 @@ class UserEntity implements JsonSerializable{
     }
 
 
-    private function getPassword()
+    public function getPassword()
     {
         return $this->password;
     }
