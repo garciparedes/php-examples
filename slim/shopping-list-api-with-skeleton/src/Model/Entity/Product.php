@@ -6,7 +6,7 @@ use JsonSerializable;
 /**
 * @Entity @Table(name="products")
 */
-class Product extends Base implements JsonSerializable
+class Product implements JsonSerializable
 {
 
     /**

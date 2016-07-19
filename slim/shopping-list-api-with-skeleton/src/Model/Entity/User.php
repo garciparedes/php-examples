@@ -9,7 +9,7 @@ use JsonSerializable;
 /**
  * @Entity @Table(name="users")
  **/
-class User extends Base implements JsonSerializable
+class User implements JsonSerializable
 {
     /**
     * @Id @GeneratedValue @Column(type="integer")

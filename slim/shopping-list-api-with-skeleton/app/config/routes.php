@@ -13,3 +13,5 @@ $app->add(new \Slim\HttpCache\Cache('public', 86400));
 
 // Register example routes
 $app->get('/items', 'App\Controller\Item:getItems')->setName('itemspage');
+$app->get('/items/{id}', 'App\Controller\Item:getItemById')->setName('itemspage');
+$app->post('/items', 'App\Controller\Item:createItem')->setName('itemspage');
