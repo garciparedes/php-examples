@@ -1,10 +1,12 @@
 <?php
 namespace App\Model\Entity;
 
+use JsonSerializable;
+
 /**
 * @Entity @Table(name="items")
 */
-class Item extends Base
+class Item extends Base implements JsonSerializable
 {
 
     /**
@@ -36,4 +38,42 @@ class Item extends Base
     * @var \DateTime
     */
     protected $createdAt;
+
+
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getProduct()
+    {
+        return $this->product;
+    }
+
+    public function getDone()
+    {
+        return $this->done;
+    }
+
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id'    => $this->getId(),
+            'product'  => $this->getProduct(),
+            'done'  => $this->getDone(),
+            'user'  => $this->getUser(),
+            'createdAt'  => $this->getCreatedAt(),
+        ];
+    }
 }

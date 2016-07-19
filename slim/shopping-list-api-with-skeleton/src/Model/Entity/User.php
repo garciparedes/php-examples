@@ -4,10 +4,12 @@ namespace App\Model\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+use JsonSerializable;
+
 /**
  * @Entity @Table(name="users")
  **/
-class User extends Base
+class User extends Base implements JsonSerializable
 {
     /**
     * @Id @GeneratedValue @Column(type="integer")
@@ -16,7 +18,7 @@ class User extends Base
     protected $id;
 
     /**
-    * @Id @Column(type="string")
+    * @Column(type="string")
     * @var string
     **/
     protected $username;
@@ -39,6 +41,34 @@ class User extends Base
     public function __construct()
     {
         $this->$itemsList = new ArrayCollection();
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    public function getItemList()
+    {
+        return $this->itemsList;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id'    => $this->getId(),
+            'username'  => $this->getUsername(),
+        ];
     }
 
 }

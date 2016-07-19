@@ -51,6 +51,10 @@ class Example extends Base
 
         $rows = $stmt->fetchAll();
 
+        /*
         $this->render($response, 'list_orders.html', ['orders' => $rows]);
+        */
+        $response = $response->withJson($rows);
+        return $response;
     }
 }
