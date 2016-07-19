@@ -21,7 +21,7 @@ trait LoadFixturesAwareTrait
     {
         $connection = self::getApp()->getContainer()->get('database');
         if (empty($connection)) {
-            throw new \RuntimeException('DoctrineDBALServiceProvider registration required');
+            throw new \RuntimeException('DoctrineORMServiceProvider registration required');
         }
 
         foreach ($tables as $table) {

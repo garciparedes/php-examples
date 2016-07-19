@@ -10,15 +10,15 @@
 
 namespace App\Provider;
 
-use Doctrine\DBAL\Configuration;
-use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\EntityManager;
 use Pimple\Container;
 
 /**
- * Doctrine DBAL service provider
- * Require doctrine/dbal ^2.5
+ * Doctrine ORM service provider
+ * Require doctrine/ORM
  */
-class DoctrineDBALServiceProvider extends AbstractServiceProvider
+class DoctrineORMServiceProvider extends AbstractServiceProvider
 {
     /**
      * Get default settings
@@ -53,9 +53,12 @@ class DoctrineDBALServiceProvider extends AbstractServiceProvider
      */
     public function register(Container $container)
     {
-        $settings = array_merge([], self::getDefaultSettings(), $container['settings']['database']);
-        $config = new Configuration();
+        //$container->get('logger')->addInfo("Something interesting happened: " . __DIR__ . "/../Model/Entity");;
 
-        $container['database'] = DriverManager::getConnection($settings['connection'], $config);
+        $settings = array_merge([], self::getDefaultSettings(), $container['settings']['database']);
+
+        $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . "/../Model/Entity"));
+
+        $container['database'] = EntityManager::create($settings['connection'], $config);
     }
 }

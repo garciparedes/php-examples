@@ -11,11 +11,11 @@ class Item extends Base
     public function getItems(Request $request, Response $response, $args)
     {
         $con = $this->container->get('database');
-        $stmt = $con->query('SELECT * FROM items');
-        $stmt->setFetchMode(\PDO::FETCH_CLASS, \App\Model\Entity\Item::class);
-        $rows = $stmt->fetchAll();
 
-        $response = $response->withJson($rows);
+
+        $itemRepository = $con->getRepository('App\Model\Entity\Item');
+        $items = $itemRepository->findAll();
+        $response = $response->withJson($items);
         return $response;
     }
 }

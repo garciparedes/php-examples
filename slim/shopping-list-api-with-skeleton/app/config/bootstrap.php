@@ -28,7 +28,7 @@ $container = new \Slim\Container($settings);
 $container->register(new \App\Provider\ViewServiceProvider());
 $container->register(new \App\Provider\HttpCacheServiceProvider());
 $container->register(new \App\Provider\LogServiceProvider());
-$container->register(new \App\Provider\DoctrineDBALServiceProvider());
+$container->register(new \App\Provider\DoctrineORMServiceProvider());
 
 // Create new application
 $app = new \Slim\App($container);

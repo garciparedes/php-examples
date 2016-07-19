@@ -27,7 +27,7 @@ return [
             'level' => Monolog\Logger::DEBUG,
         ],
 
-        // DoctrineDBAL settings
+        // Doctrine settings
         'database' => [
             'meta' => [
                 'entity_path' => [

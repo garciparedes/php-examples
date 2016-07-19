@@ -30,7 +30,7 @@ class User extends Base implements JsonSerializable
     protected $password;
 
     /**
-    * @OneToMany(targetEntity="Item", mappedBy="user")
+    * @OneToMany(targetEntity="App\Model\Entity\Item", mappedBy="user")
     * @var \Item[]
     **/
     protected $itemsList;

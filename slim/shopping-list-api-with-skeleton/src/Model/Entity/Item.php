@@ -16,8 +16,8 @@ class Item extends Base implements JsonSerializable
     protected $id;
 
     /**
-    * @ManyToOne(targetEntity="Product")
-    * @var \Product
+    * @ManyToOne(targetEntity="App\Model\Entity\Product")
+    * @var App\Model\Entity\Product
     */
     protected $product;
 
@@ -28,8 +28,8 @@ class Item extends Base implements JsonSerializable
     protected $done;
 
     /**
-    * @ManyToOne(targetEntity="User", inversedBy="itemsList")
-    * @var \User
+    * @ManyToOne(targetEntity="App\Model\Entity\User", inversedBy="itemsList")
+    * @var App\Model\Entity\User
     */
     protected $user;
 
