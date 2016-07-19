@@ -16,3 +16,4 @@ $app->get('/items', 'App\Controller\Item:getItems')->setName('itemspage');
 $app->get('/items/{id}', 'App\Controller\Item:getItemById')->setName('itemspage');
 $app->post('/items', 'App\Controller\Item:createItem')->setName('itemspage');
 $app->put('/items/{id}', 'App\Controller\Item:updateItem')->setName('itemspage');
+$app->delete('/items/{id}', 'App\Controller\Item:removeItem')->setName('itemspage');

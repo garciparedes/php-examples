@@ -82,4 +82,18 @@ class Item extends Base
         $response = $response->withJson($item);
         return $response;
     }
+
+    public function removeItem(Request $request, Response $response, $args)
+    {
+        $con = $this->container->get('database');
+
+        $id = (int) $args['id'];
+        $itemRepository = $con->getRepository('App\Model\Entity\Item');
+        $item = $itemRepository->find($id);
+
+        $con->remove($item);
+        $con->flush($item);
+        
+        return $response;
+    }
 }
