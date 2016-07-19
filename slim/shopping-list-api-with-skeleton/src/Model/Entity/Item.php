@@ -40,10 +40,28 @@ class Item implements JsonSerializable
     protected $createdAt;
 
 
+    public function __construct($id, $product, $done, $user, $createdAt)
+    {
+        $this->id = $id;
+        $this->product = $product;
+        $this->done = $done;
+        $this->user = $user;
+        $this->createdAt = $createdAt;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setProduct($product)
+    {
+        $this->product = $product;
     }
 
     public function getProduct()
@@ -51,14 +69,29 @@ class Item implements JsonSerializable
         return $this->product;
     }
 
+    public function setDone($done)
+    {
+        $this->done = $done;
+    }
+
     public function getDone()
     {
         return $this->done;
     }
 
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
     public function getUser()
     {
         return $this->user;
+    }
+
+    public function setCreatedAt($CreatedAt)
+    {
+        $this->CreatedAt = $CreatedAt;
     }
 
     public function getCreatedAt()
