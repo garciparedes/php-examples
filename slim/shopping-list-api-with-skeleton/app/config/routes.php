@@ -11,14 +11,14 @@
 // Register middleware
 $app->add(new \Slim\HttpCache\Cache('public', 86400));
 
-// Register example routes
-//$app->get('/items', 'App\Controller\Item:getItems')->setName('itemspage');
-//$app->get('/items/{id}', 'App\Controller\Item:getItemById')->setName('itemspage');
-//$app->post('/items', 'App\Controller\Item:createItem')->setName('itemspage');
-//$app->put('/items/{id}', 'App\Controller\Item:updateItem')->setName('itemspage');
-//$app->delete('/items/{id}', 'App\Controller\Item:removeItem')->setName('itemspage');
+$app->add(new \App\Middleware\BasicAuthentication(
+        (new \App\Resource\UserResource($app->getContainer()->get('database')))->getAsArray()
+));
 
+// Register routes
 $app->group('/v1', function() {
+
+    // Register item routes
     $this->group('/items', function() {
         $this->get('', 'App\Controller\Item:getItems');
         $this->get('/{id}', 'App\Controller\Item:getItemById');
@@ -26,6 +26,8 @@ $app->group('/v1', function() {
         $this->patch('/{id}', 'App\Controller\Item:updateItemProperties');
         $this->delete('/{id}', 'App\Controller\Item:removeItem');
     });
+
+    // Register product routes
     $this->group('/products', function() {
         $this->get('', 'App\Controller\Product:getProducts');
         $this->get('/{id}', 'App\Controller\Product:getProductById');

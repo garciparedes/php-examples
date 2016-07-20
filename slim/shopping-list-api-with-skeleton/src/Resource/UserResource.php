@@ -27,6 +27,21 @@ class UserResource extends Base
         }
     }
 
+    public function getByUsername(string $username)
+    {
+        return $this->userRepository->findOneBy(array('username' => $username));
+    }
+
+    public function getAsArray()
+    {
+        $users = $this->get();
+        $usersArray;
+        foreach($users as $user) {
+            $usersArray[$user->getUsername()] = $user->getPassword();
+        }
+        return $usersArray;
+    }
+
     public function save(User $user)
     {
         $this->entityManager->persist($user);

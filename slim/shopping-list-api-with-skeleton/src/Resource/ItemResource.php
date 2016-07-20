@@ -8,7 +8,7 @@ use App\Model\Entity\Item;
 class ItemResource extends Base
 {
 
-    protected $itemRepository;
+    private $itemRepository;
 
     public function __construct(EntityManager $entityManager)
     {
@@ -18,12 +18,12 @@ class ItemResource extends Base
 
     }
 
-    public function get(int $id = null)
+    public function get(\App\Model\Entity\User $user,int $id = null)
     {
         if ($id === null){
-            return $this->itemRepository->findAll();
+            return $this->itemRepository->findBy(array('user' => $user));
         } else {
-            return $this->itemRepository->find($id);
+            return $this->itemRepository->findOneBy(array('user' => $user, 'id' =>$id));
         }
     }
 
@@ -34,14 +34,14 @@ class ItemResource extends Base
         return $item;
     }
 
-    public function remove(Item $item)
+    private function remove(Item $item)
     {
         $this->entityManager->remove($item);
         $this->entityManager->flush($item);
     }
 
-    public function removeById(int $id)
+    public function removeById(\App\Model\Entity\User $user,int $id)
     {
-        $this->remove($this->get($id));
+        $this->remove($this->get($user,$id));
     }
 }
