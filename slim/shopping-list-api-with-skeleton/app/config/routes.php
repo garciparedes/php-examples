@@ -37,5 +37,6 @@ $app->group('/v1', function() {
     // Register product routes
     $this->group('/users', function() {
         $this->get('', 'App\Controller\User:getUsers');
+        $this->get('/{username}', 'App\Controller\User:getUser');
     });
 });

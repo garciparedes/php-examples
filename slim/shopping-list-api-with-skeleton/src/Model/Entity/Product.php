@@ -65,7 +65,7 @@ class Product implements JsonSerializable
         return [
             'id'    => $this->getId(),
             'name'  => $this->getName(),
-            'creator' => $this->getCreator(),
+            'creator' => $this->getCreator()->getUsername(),
             'createdAt'  => $this->getCreatedAt(),
         ];
     }

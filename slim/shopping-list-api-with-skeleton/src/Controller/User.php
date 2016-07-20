@@ -14,4 +14,13 @@ class User extends Base
 
         return $response->withJson($users);
     }
+
+    public function getUser(Request $request, Response $response, $args)
+    {
+        $username = (string) $args['username'];
+
+        $user = $this->userResource->getByUsername($username);
+
+        return $response->withJson($user);
+    }
 }
