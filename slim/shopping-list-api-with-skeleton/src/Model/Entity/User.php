@@ -86,9 +86,19 @@ class User implements JsonSerializable
         return $this->itemsList;
     }
 
+    public function getItemListArray()
+    {
+        return $this->getItemList()->toArray();
+    }
+
     public function getCreatedProducts()
     {
         return $this->createdProducts;
+    }
+
+    public function getCreatedProductsArray()
+    {
+        return $this->getCreatedProducts()->toArray();
     }
 
     public function jsonSerialize()
@@ -96,7 +106,7 @@ class User implements JsonSerializable
         return [
             'id'    => $this->getId(),
             'username'  => $this->getUsername(),
-            'createdProducts' =>$this->getCreatedProducts(),
+            'createdProducts' =>$this->getCreatedProductsArray(),
         ];
     }
 
