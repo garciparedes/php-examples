@@ -38,7 +38,7 @@ class Item extends Base
         $productId =  filter_var($data['productId'], FILTER_SANITIZE_NUMBER_INT);
         $product = $this->productResource->get($productId);
 
-        $item = new \App\Model\Entity\Item(null, $product, false, $user, new \DateTime("now"));
+        $item = new \App\Model\Entity\Item($product, false, $user, new \DateTime("now"));
 
         $this->itemResource->save($item);
 

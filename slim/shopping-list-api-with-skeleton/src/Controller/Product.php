@@ -23,4 +23,20 @@ class Product extends Base
 
         return $response->withJson($products);
     }
+
+    public function createProduct(Request $request, Response $response, $args)
+    {
+        $username = $request->getAttribute('USERNAME');
+        $user = $this->userResource->getByUsername($username);
+
+        $data = $request->getParsedBody();
+
+        $name=  filter_var($data['name'], FILTER_SANITIZE_STRING);
+
+        $product = new \App\Model\Entity\Product($name, $user, new \DateTime("now"));
+
+        $this->productResource->save($product);
+
+        return $response->withJson($product);
+    }
 }

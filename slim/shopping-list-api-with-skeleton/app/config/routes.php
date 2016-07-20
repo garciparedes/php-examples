@@ -31,6 +31,11 @@ $app->group('/v1', function() {
     $this->group('/products', function() {
         $this->get('', 'App\Controller\Product:getProducts');
         $this->get('/{id}', 'App\Controller\Product:getProductById');
+        $this->post('', 'App\Controller\Product:createProduct');
     });
 
+    // Register product routes
+    $this->group('/users', function() {
+        $this->get('', 'App\Controller\User:getUsers');
+    });
 });

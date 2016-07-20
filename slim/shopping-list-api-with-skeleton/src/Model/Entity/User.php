@@ -37,16 +37,28 @@ class User implements JsonSerializable
 
     /**
     * @OneToMany(targetEntity="App\Model\Entity\Item", mappedBy="user")
-    * @var \Item[]
+    * @var App\Model\Entity\Item[]
     **/
     protected $itemsList;
+
+    /**
+    * @OneToMany(targetEntity="App\Model\Entity\Product", mappedBy="creator")
+    * @var App\Model\Entity\Product[]
+    **/
+    protected $createdProducts;
 
     /**
     *
     **/
     public function __construct()
     {
-        $this->$itemsList = new ArrayCollection();
+        if ($this->itemsList === null){
+            $this->itemsList = new ArrayCollection();
+        }
+
+        if ($this->createdProducts === null){
+            $this->createdProducts = new ArrayCollection();
+        }
     }
 
     public function getId()
@@ -74,11 +86,17 @@ class User implements JsonSerializable
         return $this->itemsList;
     }
 
+    public function getCreatedProducts()
+    {
+        return $this->createdProducts;
+    }
+
     public function jsonSerialize()
     {
         return [
             'id'    => $this->getId(),
             'username'  => $this->getUsername(),
+            'createdProducts' =>$this->getCreatedProducts(),
         ];
     }
 

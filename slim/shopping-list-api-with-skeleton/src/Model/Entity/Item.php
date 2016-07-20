@@ -40,9 +40,8 @@ class Item implements JsonSerializable
     protected $createdAt;
 
 
-    public function __construct($id, $product, $done, $user, $createdAt)
+    public function __construct($product, $done, $user, $createdAt)
     {
-        $this->id = $id;
         $this->product = $product;
         $this->done = $done;
         $this->user = $user;
@@ -105,7 +104,6 @@ class Item implements JsonSerializable
             'id'    => $this->getId(),
             'product'  => $this->getProduct(),
             'done'  => $this->getDone(),
-            'user'  => $this->getUser(),
             'createdAt'  => $this->getCreatedAt(),
         ];
     }
