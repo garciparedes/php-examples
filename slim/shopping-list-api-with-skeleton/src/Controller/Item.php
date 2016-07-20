@@ -4,47 +4,21 @@ namespace App\Controller;
 
 use Slim\Http\Request;
 use Slim\Http\Response;
-use Interop\Container\ContainerInterface;
 
 class Item extends Base
 {
 
-    protected $itemRepository;
-
-    protected $productRepository;
-
-    protected $userRepository;
-
-    /**
-     * Controller Contructor.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        parent::__construct($container);
-
-        $this->itemRepository = $this->database->getRepository('App\Model\Entity\Item');
-        $this->productRepository = $this->database->getRepository('App\Model\Entity\Product');
-        $this->userRepository = $this->database->getRepository('App\Model\Entity\User');
-    }
-
-
     public function getItems(Request $request, Response $response, $args)
     {
-        $items = $this->itemRepository->findAll();
-        $response = $response->withJson($items);
-        return $response;
+        $items = $this->itemResource->get();
+        return $response->withJson($items);
     }
 
     public function getItemById(Request $request, Response $response, $args)
     {
-
         $id = (int) $args['id'];
-
-        $item = $this->itemRepository->find($id);
-        $response = $response->withJson($item);
-        return $response;
+        $item = $this->itemResource->get($id);
+        return $response->withJson($item);
     }
 
     public function createItem(Request $request, Response $response, $args)
@@ -53,31 +27,29 @@ class Item extends Base
         $data = $request->getParsedBody();
 
         $productId =  filter_var($data['productId'], FILTER_SANITIZE_NUMBER_INT);
-        $product = $this->productRepository->find($productId);
+        $product = $this->productResource->get($productId);
 
-        $user = $this->userRepository->find(1);
+        $user = $this->userResource->get(1);
 
-        $item = new \App\Model\Entity\Item(null, $product, 0, $user, new \DateTime("now"));
+        $item = new \App\Model\Entity\Item(null, $product, false, $user, new \DateTime("now"));
 
-        $this->database->persist($item);
-        $this->database->flush($item);
-        $response = $response->withJson($item);
-        return $response;
+        $this->itemResource->save($item);
+
+        return $response->withJson($item);
     }
 
-    public function updateItem(Request $request, Response $response, $args)
+    public function updateItemProperties(Request $request, Response $response, $args)
     {
 
         $id = (int) $args['id'];
-        $item = $this->itemRepository->find($id);
-
+        $item = $this->itemResource->get($id);
 
         $data = $request->getParsedBody();
 
+
         if(array_key_exists('productId', $data)) {
             $productId =  filter_var($data['productId'], FILTER_SANITIZE_NUMBER_INT);
-
-            $product = $this->productRepository->find($productId);
+            $product = $this->productResource->get($productId);
             $item->setProduct($product);
         }
 
@@ -85,21 +57,17 @@ class Item extends Base
             $item->setDone(filter_var( $data['done'], FILTER_VALIDATE_BOOLEAN));
         }
 
-        $this->database->persist($item);
-        $this->database->flush($item);
-        $response = $response->withJson($item);
-        return $response;
+        $item = $this->itemResource->save($item);
+
+        return $response->withJson($item);
     }
 
     public function removeItem(Request $request, Response $response, $args)
     {
 
         $id = (int) $args['id'];
-        $item = $this->itemRepository->find($id);
 
-        $this->database->remove($item);
-        $this->database->flush($item);
-
+        $this->itemResource->removeById($id);
         return $response;
     }
 }

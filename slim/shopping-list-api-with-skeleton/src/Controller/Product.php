@@ -10,12 +10,17 @@ class Product extends Base
 
     public function getProducts(Request $request, Response $response, $args)
     {
-        $con = $this->container->get('database');
+        $products = $this->productResource->get();
 
+        return $response->withJson($products);
+    }
 
-        $productRepository = $con->getRepository('App\Model\Entity\Product');
-        $products = $productRepository->findAll();
-        $response = $response->withJson($products);
-        return $response;
+    public function getProductById(Request $request, Response $response, $args)
+    {
+        $id = (int) $args['id'];
+
+        $products = $this->productResource->get($id);
+
+        return $response->withJson($products);
     }
 }

@@ -24,10 +24,9 @@ abstract class Base
     protected $container;
 
 
-    /**
-     *
-     */
-    protected $database;
+    protected $itemResource;
+    protected $productResource;
+    protected $userResource;
 
     /**
      * Controller Contructor.
@@ -37,8 +36,16 @@ abstract class Base
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->database = $container->get('database');
 
+        $this->itemResource = new \App\Resource\ItemResource(
+            $container->get('database')
+        );
+        $this->productResource = new \App\Resource\ProductResource(
+            $container->get('database')
+        );
+        $this->userResource = new \App\Resource\UserResource(
+            $container->get('database')
+        );
     }
 
     /**
