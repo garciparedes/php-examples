@@ -47,11 +47,24 @@ class User implements JsonSerializable
     **/
     protected $createdProducts;
 
+
+    /**
+    * @Column(type="datetime")
+    * @var \DateTime
+    */
+    protected $createdAt;
+
+
     /**
     *
     **/
-    public function __construct()
+    public function __construct($username, $password, $email, $createdAt)
     {
+        $this->username = $username;
+        $this->password = $password;
+        $this->email = $email;
+        $this->createdAt = $createdAt;
+
         if ($this->itemsList === null){
             $this->itemsList = new ArrayCollection();
         }
@@ -101,12 +114,18 @@ class User implements JsonSerializable
         return $this->getCreatedProducts()->toArray();
     }
 
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
     public function jsonSerialize()
     {
         return [
             'id'    => $this->getId(),
             'username'  => $this->getUsername(),
             'createdProducts' =>$this->getCreatedProductsArray(),
+            'createdAt'  => $this->getCreatedAt(),
         ];
     }
 
