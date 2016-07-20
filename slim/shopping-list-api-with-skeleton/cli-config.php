@@ -1,24 +1,24 @@
 <?php
 
-
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 
-require_once "vendor/autoload.php";
+require "vendor/autoload.php";
 
-// Create a simple "default" Doctrine ORM configuration for Annotations
-$isDevMode = true;
-$config = Setup::createAnnotationMetadataConfiguration(array(__DIR__."/src/Model"), $isDevMode);
+$settings = include 'app/config/app.php';
+$settings = $settings['settings']['database'];
 
-// database configuration parameters
-$conn = array(
-    'driver' => 'pdo_mysql',
-    'host' => 'localhost',
-    'dbname' => 'shoppingListApiv2',
-    'user' => 'user',
-    'password' => 'password',
+$config = Setup::createAnnotationMetadataConfiguration(
+    $settings['meta']['entity_path'],
+    $settings['meta']['auto_generate_proxies'],
+    $settings['meta']['proxy_dir'],
+    $settings['meta']['cache']
 );
 
 
-$entityManager = EntityManager::create($conn, $config);
-return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet($entityManager);
+
+
+$em = EntityManager::create($settings['connection'], $config);
+
+return ConsoleRunner::createHelperSet($em);

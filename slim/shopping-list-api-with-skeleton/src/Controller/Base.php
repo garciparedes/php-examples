@@ -23,6 +23,12 @@ abstract class Base
      */
     protected $container;
 
+
+    /**
+     *
+     */
+    protected $database;
+
     /**
      * Controller Contructor.
      *
@@ -31,6 +37,8 @@ abstract class Base
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->database = $container->get('database');
+
     }
 
     /**

@@ -27,6 +27,12 @@ class User implements JsonSerializable
     * @Column(type="string")
     * @var string
     **/
+    protected $email;
+
+    /**
+    * @Column(type="string")
+    * @var string
+    **/
     protected $password;
 
     /**
@@ -51,6 +57,11 @@ class User implements JsonSerializable
     public function getUsername()
     {
         return $this->username;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
     }
 
     public function getPassword()
