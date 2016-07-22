@@ -21,7 +21,7 @@ class ItemResource extends Base
     public function get(\App\Model\Entity\User $user,int $id = null)
     {
         if ($id === null){
-            return $this->itemRepository->findBy(array('user' => $user));
+            return $this->itemRepository->findBy(array('user' => $user), array('createdAt' => 'DESC'));
         } else {
             return $this->itemRepository->findOneBy(array('user' => $user, 'id' =>$id));
         }

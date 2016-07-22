@@ -51,7 +51,7 @@ class Item extends Base
         $user = $this->userResource->getByUsername($username);
 
         $id = (int) $args['id'];
-        $item = $this->itemResource->get($username, $id);
+        $item = $this->itemResource->get($user, $id);
 
         $data = $request->getParsedBody();
 
