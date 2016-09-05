@@ -1,0 +1,12 @@
+{
+    "name": "sergio/proof-instagram",
+    "authors": [
+        {
+            "name": "Sergio García",
+            "email": "sergio@garciparedes.me"
+        }
+    ],
+    "require": {
+        "bolandish/instagram-grabber": "^1.0"
+    }
+}
